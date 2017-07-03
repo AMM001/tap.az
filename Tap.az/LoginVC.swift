@@ -78,7 +78,6 @@ class LoginVC: UIViewController {
         self.updateUserInterface()
     }
     
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.loginView.fadeIn(duration: 1.0)
@@ -93,7 +92,6 @@ class LoginVC: UIViewController {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-
     fileprivate func setupViews () {
         
         // 1adding login view with their x , y ,w , h constraints
@@ -223,18 +221,18 @@ class LoginVC: UIViewController {
     }
     
     
-    fileprivate var visible = false
+    fileprivate var counter = 0
     
     func keyboardWillShow(notification: NSNotification) {
         
-        self.visible = true
+        counter += 1
         
         if let _ = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             
-            if self.visible {
+            if self.counter == 1 {
                 
                 if self.loginView.alpha != 0 {
-                    self.view.frame.origin.y -= 25.0
+                    self.view.frame.origin.y -= 80.0
                 }
                 
             }
@@ -245,15 +243,14 @@ class LoginVC: UIViewController {
     
     func keyboardWillHide(notification: NSNotification) {
         
-        self.visible = false
+        counter = 0
         
         if let _ = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             
-            if self.visible {
+            if counter == 0 {
                 
                 if self.loginView.alpha != 0 {
-                    self.view.frame.origin.y += 25.0
-                    
+                    self.view.frame.origin.y += 80.0
                 }
                 
             }
@@ -261,7 +258,7 @@ class LoginVC: UIViewController {
         }
         
     }
-    
+
 }
 
 

@@ -61,7 +61,6 @@ class HomeVC: UIViewController {
         return view
     }()
     
- 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -74,7 +73,6 @@ class HomeVC: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
- 
     fileprivate func setupNavBar() {
         
         let leftBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "ic_reorder"), style: .plain, target: self , action: #selector(handeSideMenu))
@@ -168,7 +166,7 @@ class HomeVC: UIViewController {
             self.refreshControl.endRefreshing()
             
         })
-
+        
     }
 
     func stopRefresh () {

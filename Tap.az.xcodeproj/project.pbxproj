@@ -209,7 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				5C0E25CC1EFACA2D00A5A6E5 /* CategoryCell.swift */,
-				5C0E25CF1EFACFD100A5A6E5 /* CategoryView.swift */,
 			);
 			name = Category;
 			sourceTree = "<group>";
@@ -274,10 +273,12 @@
 		5C9086041EEEACD1008B0B45 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				5CFE379A1F04018500046BC1 /* Category */,
 				5C6735C31EED4718009B3EFC /* MenuView.swift */,
 				5C77E8CF1EF6D57E00DC42F2 /* MenuCell.swift */,
 				5CDC458A1EF2F842001AC893 /* HomeCell.swift */,
 				5C31FBFC1EF9900700252DF0 /* SearchBarBottomView.swift */,
+				5C0E25CF1EFACFD100A5A6E5 /* CategoryView.swift */,
 			);
 			name = Dashboard;
 			sourceTree = "<group>";
@@ -357,7 +358,6 @@
 		5CCFAEB41EEC6E4E0070A6F1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				5CFE379A1F04018500046BC1 /* Category */,
 				5C863FCD1EF3B99C00D1A588 /* Person.swift */,
 				5C31FBFA1EF98A2900252DF0 /* Goods.swift */,
 				5CBFD6FA1EFB0DE100DEACB7 /* Vehicle.swift */,
