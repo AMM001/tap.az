@@ -1,0 +1,16 @@
+# tap.az
+
+![simulator screen shot jul 14 2017 00 48 23](https://user-images.githubusercontent.com/26818691/28188480-65d78806-6833-11e7-9a9e-2d783ed92436.png)
+![simulator screen shot jul 14 2017 00 59 43](https://user-images.githubusercontent.com/26818691/28188479-65d4fdf2-6833-11e7-8ef3-861a4aa03369.png)
+![simulator screen shot jul 14 2017 00 59 47](https://user-images.githubusercontent.com/26818691/28188485-660a8de6-6833-11e7-907c-02e282bb22a4.png)
+![simulator screen shot jul 14 2017 00 59 58](https://user-images.githubusercontent.com/26818691/28188486-660bd2dc-6833-11e7-946a-a30e27a22373.png)
+![simulator screen shot jul 14 2017 01 00 01](https://user-images.githubusercontent.com/26818691/28188483-660637be-6833-11e7-8a73-101396692a98.png)
+![simulator screen shot jul 14 2017 01 00 05](https://user-images.githubusercontent.com/26818691/28188484-660a56be-6833-11e7-8997-bd4bbf148ace.png)
+![simulator screen shot jul 14 2017 01 00 34](https://user-images.githubusercontent.com/26818691/28188481-65fcefba-6833-11e7-9933-638534d01e53.png)
+![simulator screen shot jul 14 2017 01 00 43](https://user-images.githubusercontent.com/26818691/28188482-65ff9fee-6833-11e7-8ed4-77003655e52f.png)
+![simulator screen shot jul 14 2017 01 01 05](https://user-images.githubusercontent.com/26818691/28188487-66217d80-6833-11e7-928b-7453af3cda81.png)
+![simulator screen shot jul 14 2017 01 01 09](https://user-images.githubusercontent.com/26818691/28188488-66233814-6833-11e7-8d4e-941a5a9e6586.png)
+![simulator screen shot jul 14 2017 01 01 13](https://user-images.githubusercontent.com/26818691/28188489-662d7a9a-6833-11e7-9b5a-1ff1b0170b43.png)
+![simulator screen shot jul 14 2017 01 01 19](https://user-images.githubusercontent.com/26818691/28188492-6633a456-6833-11e7-8a43-02522893c330.png)
+![simulator screen shot jul 14 2017 01 01 25](https://user-images.githubusercontent.com/26818691/28188491-66329da4-6833-11e7-9d58-81763de71be1.png)
+![simulator screen shot jul 14 2017 01 01 29](https://user-images.githubusercontent.com/26818691/28188490-662f5fd6-6833-11e7-9ace-2d2c06e150a1.png)
