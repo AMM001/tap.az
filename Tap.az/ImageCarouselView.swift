@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ImageCarouselViewDelegate {
-    func scrolledToPage(page: Int)
+    func scrolledToPage(_ page: Int)
 }
 
 @IBDesignable
@@ -28,12 +28,11 @@ class ImageCarouselView: UIView {
             setupView()
         }
     }
-    
     var pageLabel = UILabel()
     
     var carouselScrollView: UIScrollView!
     
-    var images = [UIImage]() {
+    var imageURLs = [String]() {
         didSet {
             setupView()
         }
@@ -42,20 +41,16 @@ class ImageCarouselView: UIView {
     var pageControl = UIPageControl()
     
     var currentPage: Int! {
-        
-        get {
-            return Int(round(carouselScrollView.contentOffset.x / self.bounds.width ))
-        }
-        
+        return Int(round(carouselScrollView.contentOffset.x / self.bounds.width))
     }
     
-    var pageColor: UIColor? {
+    @IBInspectable var pageColor: UIColor? {
         didSet {
             setupView()
         }
     }
     
-    var currentPageColor: UIColor? {
+    @IBInspectable var currentPageColor: UIColor? {
         didSet {
             setupView()
         }
@@ -67,10 +62,7 @@ class ImageCarouselView: UIView {
         }
         
         carouselScrollView = UIScrollView(frame: bounds)
-        carouselScrollView.backgroundColor = UIColor.clear
-        carouselScrollView.showsHorizontalScrollIndicator = true
-        carouselScrollView.bounces = false
-        
+        carouselScrollView.showsHorizontalScrollIndicator = false
         
         addImages()
         
@@ -80,33 +72,32 @@ class ImageCarouselView: UIView {
         }
     }
     
-    
     func addImages() {
-        
         carouselScrollView.isPagingEnabled = true
-        carouselScrollView.contentSize = CGSize(width: bounds.width * CGFloat(images.count), height: bounds.height)
+        carouselScrollView.bounces = false
+        carouselScrollView.contentSize = CGSize(width: bounds.width * CGFloat(imageURLs.count), height: bounds.height)
         
-        for i in 0..<images.count {
-            let imageView = UIImageView(frame: CGRect(x: bounds.width * CGFloat(i), y: 0, width: bounds.width, height: bounds.height))
-            imageView.image = images[i]
-            imageView.backgroundColor = UIColor.clear
+        for i in 0..<imageURLs.count {
+            let imageView = ImageView(frame: CGRect(x: bounds.width * CGFloat(i), y: 0, width: bounds.width, height: bounds.height))
+            imageView.loadImageWithUrl(imageURLs[i])
             imageView.contentMode = .scaleAspectFill
             imageView.layer.masksToBounds = true
             imageView.isUserInteractionEnabled = true
             carouselScrollView.addSubview(imageView)
-            
+            print("Added")
         }
         
         self.addSubview(carouselScrollView)
     }
     
     func addPageControl() {
-        if images.count <= pageControlMaxItems {
-            pageControl.numberOfPages = images.count
-            pageControl.sizeToFit()
+        
+        if imageURLs.count <= pageControlMaxItems {
+            pageControl.numberOfPages = imageURLs.count
             pageControl.isUserInteractionEnabled = false
+            pageControl.sizeToFit()
             pageControl.currentPage = 0
-            pageControl.center = CGPoint(x: self.center.x, y: bounds.height - (pageControl.bounds.height / 2.0 ) )
+            pageControl.center = CGPoint(x: self.center.x, y: bounds.height - pageControl.bounds.height/2 - 8)
             
             if let pageColor = self.pageColor {
                 pageControl.pageIndicatorTintColor = pageColor
@@ -118,7 +109,7 @@ class ImageCarouselView: UIView {
             self.addSubview(pageControl)
             
         } else {
-            pageLabel.text = "1 / \(images.count)"
+            pageLabel.text = "1 / \(imageURLs.count)"
             pageLabel.font = UIFont.systemFont(ofSize: 10.0, weight: UIFontWeightLight)
             pageLabel.frame.size = CGSize(width: 40, height: 20)
             pageLabel.textAlignment = .center
@@ -131,6 +122,7 @@ class ImageCarouselView: UIView {
             
             self.addSubview(pageLabel)
         }
+        
     }
     
     override func awakeFromNib() {
@@ -157,12 +149,11 @@ extension ImageCarouselView: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.pageControl.currentPage = self.currentPage
-        self.pageLabel.text = "\(self.currentPage+1) / \(images.count)"
+        self.pageLabel.text = "\(self.currentPage+1) / \(imageURLs.count)"
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        self.delegate?.scrolledToPage(page: self.currentPage)
-        
+        self.delegate?.scrolledToPage(self.currentPage)
     }
     
 }

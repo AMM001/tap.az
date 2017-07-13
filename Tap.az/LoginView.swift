@@ -1,8 +1,8 @@
 //
 //  LoginView.swift
-//  Tap.az
+//  tap.az
 //
-//  Created by Ozal Suleyman on 6/10/17.
+//  Created by Ozal Suleyman on 7/11/17.
 //  Copyright © 2017 OzalSuleyman. All rights reserved.
 //
 
@@ -10,69 +10,61 @@ import UIKit
 
 class LoginView: UIView {
     
-    var delegate : LoginVC?
+    var delegate : UIViewController? {
     
-    let titleButton : OZRippleButton = {
-        let button = OZRippleButton(type: UIButtonType.system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitleColor(ORANGE_COLOR, for: .normal)
-        button.setTitle("Login", for: .normal)
-        button.rippleColor = ORANGE_COLOR
-        button.rippleBackgroundColor = UIColor.clear
-        button.tintColor = UIColor.clear
-        button.titleLabel?.font = UIFont(name: "Helvetica", size: 18.0)!
-        return button
-    }()
+        didSet {
+ 
+            if let controller = self.delegate as? LoginVC {
+                
+                self.loginButton.addTarget(controller , action: #selector(controller.handleLogin(sender:)), for: .touchUpInside)
+                
+            }
+        
+        }
+        
+    }
     
     let usernameTextField : TapTextField = {
-        let textField = TapTextField(frame: CGRect.zero)
-        textField.imageView.image = #imageLiteral(resourceName: "ic_perm_identity").withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.imageView.contentMode = .scaleAspectFill
-        let attributedString = NSMutableAttributedString(string: "Username", attributes: [ NSFontAttributeName : UIFont(name: "Helvetica", size: 15.0)! ,
-                                                                                        NSForegroundColorAttributeName : ORANGE_COLOR ])
-        textField.returnKeyType = .next
-        textField.attributedPlaceholder = attributedString
-        return textField
-    }()
     
-    let usernameLineView : UIView = {
-        let view = UIView(frame: CGRect.zero)
+        let view = TapTextField(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 0.4)
+        view.placeholder = "Username"
+        view.imageView.image = #imageLiteral(resourceName: "ic_perm_identity").withRenderingMode(.alwaysTemplate)
+        view.returnKeyType = .next
         return view
+        
     }()
     
     let passwordTextField : TapTextField = {
-        let textField = TapTextField(frame: CGRect.zero)
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        let attributedString = NSMutableAttributedString(string: "Passsword", attributes: [ NSFontAttributeName : UIFont(name: "Helvetica", size: 15.0)! ,
-                                                                                           NSForegroundColorAttributeName : ORANGE_COLOR ])
-        textField.attributedPlaceholder = attributedString
-        textField.imageView.image = #imageLiteral(resourceName: "ic_visibility").withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        textField.isSecureTextEntry = true
-        textField.returnKeyType = .done
-        return textField
-    }()
-    
-    let passwordLineView : UIView = {
-        let view = UIView(frame: CGRect.zero)
+        
+        let view = TapTextField(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 0.4)
+        view.placeholder = "Passsword"
+        view.imageView.image = #imageLiteral(resourceName: "ic_visibility").withRenderingMode(.alwaysTemplate)
+        view.isSecureTextEntry = true
+        view.returnKeyType = .done
+        return view
+        
+    }()
+
+    let loginButton : OZRippleButton = {
+        let view = OZRippleButton(frame: CGRect.zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.setTitle("Login", for: .normal)
+        view.setTitleColor(ORANGE_COLOR, for: .normal)
+        view.titleLabel?.font = UIFont(name: HELVETICA_NEUE_BOLD , size: 18.0)
         return view
     }()
     
     let checkBox : OZCheckBox = {
-        let box = OZCheckBox(frame: CGRect.zero)
-        box.translatesAutoresizingMaskIntoConstraints = false
-        box.isChecked = false
-        box.tintColor = ORANGE_COLOR
-        box.rippleColor = ORANGE_COLOR
-        box.rippleBackgroundColor = UIColor.clear
-        box.isUserInteractionEnabled = true
-        return box
+        let view = OZCheckBox(frame: CGRect.zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.tintColor = ORANGE_COLOR
+        view.isChecked = false
+        view.addCorner(radius: 4.0, borderWidth: 0.0, color: UIColor.clear)
+        return view
     }()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupViews()
@@ -84,58 +76,55 @@ class LoginView: UIView {
     
     private func setupViews () {
     
-        // add username textfield contraints
+        // 1
         self.addSubview(self.usernameTextField)
-        self.addSubview(self.usernameLineView)
-    
-        self.usernameTextField.resignFirstResponder()
         self.usernameTextField.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-        self.usernameTextField.topAnchor.constraint(equalTo: self.topAnchor , constant : 10.0 ).isActive = true
+        self.usernameTextField.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         self.usernameTextField.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        self.usernameTextField.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
-    
+        self.usernameTextField.heightAnchor.constraint(equalTo: self.heightAnchor , multiplier : 1/3).isActive = true
         
-        self.usernameLineView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 4.0).isActive = true
-        self.usernameLineView.topAnchor.constraint(equalTo: self.usernameTextField.bottomAnchor, constant: 4.0).isActive = true
-        self.usernameLineView.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -8.0).isActive = true
-        self.usernameLineView.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
-        
-        // add password textfield contraints
+        // 2
         self.addSubview(self.passwordTextField)
-        self.addSubview(self.passwordLineView)
-        
-        self.passwordTextField.resignFirstResponder()
         self.passwordTextField.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
-        self.passwordTextField.topAnchor.constraint(equalTo: self.usernameLineView.bottomAnchor , constant : 10.0 ).isActive = true
+        self.passwordTextField.topAnchor.constraint(equalTo: self.usernameTextField.bottomAnchor).isActive = true
         self.passwordTextField.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        self.passwordTextField.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
+        self.passwordTextField.heightAnchor.constraint(equalTo: self.usernameTextField.heightAnchor).isActive = true
         
-        self.passwordLineView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 4.0).isActive = true
-        self.passwordLineView.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 4.0).isActive = true
-        self.passwordLineView.widthAnchor.constraint(equalTo: self.widthAnchor, constant: -8.0).isActive = true
-        self.passwordLineView.heightAnchor.constraint(equalToConstant: 1.0).isActive = true
+        //3
+        self.addSubview(self.loginButton)
+        self.loginButton.leftAnchor.constraint(equalTo: self.leftAnchor ).isActive = true
+        self.loginButton.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor).isActive = true
+        self.loginButton.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        self.loginButton.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         
-        // title label constraints
-        self.addSubview(self.titleButton)
-        
-        self.titleButton.leftAnchor.constraint(equalTo: self.leftAnchor , constant : 30.0).isActive = true
-        self.titleButton.topAnchor.constraint(equalTo: self.passwordLineView.bottomAnchor ).isActive = true
-        self.titleButton.widthAnchor.constraint(equalTo: self.widthAnchor , constant : -60.0).isActive = true
-        self.titleButton.bottomAnchor.constraint(equalTo : self.bottomAnchor ).isActive = true
-        
-        self.titleButton.addTarget(self.delegate , action: #selector(self.delegate?.loginButtonClick(button:)), for: .touchUpInside)
-        
-
-        // title label constraints
+        //4 
         self.addSubview(self.checkBox)
-        self.checkBox.leftAnchor.constraint(equalTo: self.leftAnchor, constant : 10.0).isActive = true
-        self.checkBox.centerYAnchor.constraint(equalTo: self.titleButton.centerYAnchor).isActive = true
-        self.checkBox.widthAnchor.constraint(equalToConstant : 25.0).isActive = true
-        self.checkBox.heightAnchor.constraint(equalToConstant : 25.0).isActive = true
+        self.checkBox.leftAnchor.constraint(equalTo: self.leftAnchor , constant : 14.0).isActive = true
+        self.checkBox.centerYAnchor.constraint(equalTo: self.loginButton.centerYAnchor).isActive = true
+        self.checkBox.widthAnchor.constraint(equalToConstant: 25.0).isActive = true
+        self.checkBox.heightAnchor.constraint(equalToConstant: 25.0).isActive = true
+        
     }
     
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

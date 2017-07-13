@@ -1,32 +1,33 @@
 //
 //  DetailCell.swift
-//  Tap.az
+//  tap.az
 //
-//  Created by Ozal Suleyman on 6/23/17.
+//  Created by Ozal Suleyman on 7/8/17.
 //  Copyright © 2017 OzalSuleyman. All rights reserved.
 //
 
 import UIKit
 
 class DetailCell: UICollectionViewCell {
-    
-    var detail : Detail?  {
+
+    var detail : Detail? {
     
         didSet {
-    
-            self.keyLabel.text = detail?.key
-            self.valueLabel.text = detail?.value
+        
+            self.keyLabel.text = self.detail!.key!
+            self.valueLabel.text = self.detail!.value!
             
         }
     
     }
+
     
     let designView : UIView = {
         let view = UIView(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
+    
     private let keyLabel : UILabel = {
         let view = UILabel(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -42,23 +43,17 @@ class DetailCell: UICollectionViewCell {
         return view
     }()
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.designView.fadeOut(duration: 0.2)
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         self.setupViews()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    private func setupViews () {
-        
+    
+    fileprivate func setupViews () {
+    
         self.backgroundColor = UIColor.white
         
         // 1
@@ -68,12 +63,14 @@ class DetailCell: UICollectionViewCell {
         self.designView.widthAnchor.constraint(equalTo: self.widthAnchor ).isActive = true
         self.designView.heightAnchor.constraint(equalTo: self.heightAnchor ).isActive = true
         
+        
         // 2
         self.addSubview(self.keyLabel)
         self.keyLabel.leftAnchor.constraint(equalTo: self.leftAnchor , constant : 10.0 ).isActive = true
         self.keyLabel.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         self.keyLabel.widthAnchor.constraint(equalTo: self.widthAnchor , multiplier : 1/3 ).isActive = true
         self.keyLabel.heightAnchor.constraint(equalTo: self.heightAnchor ).isActive = true
+    
         
         // 3
         self.addSubview(self.valueLabel)
@@ -85,11 +82,5 @@ class DetailCell: UICollectionViewCell {
         
     }
 
+    
 }
-
-
-
-
-
-
-

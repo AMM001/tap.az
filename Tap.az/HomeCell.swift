@@ -1,8 +1,8 @@
 //
 //  HomeCell.swift
-//  Tap.az
+//  tap.az
 //
-//  Created by Ozal Suleyman on 6/15/17.
+//  Created by Ozal Suleyman on 7/2/17.
 //  Copyright © 2017 OzalSuleyman. All rights reserved.
 //
 
@@ -11,157 +11,204 @@ import UIKit
 class HomeCell: UICollectionViewCell {
     
     var controller : UIViewController? {
-        didSet{
-
-            self.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self , action: #selector(tap(gesture:))))
+    
+        didSet {
+            
         }
+    
     }
     
-    let designView : UIView = {
+    var ad : Ad? {
+    
+        didSet {
+            self.shareData()
+        }
+        
+    }
+        
+    let desigView : UIView = {
         let view = UIView(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.addShadow(shadowColor: UIColor.gray.withAlphaComponent(0.5 ).cgColor , shadowOffset: CGSize(width: 2.0, height: 2.0 ), shadowOpacity: 2.0 , shadowRadius: 1.0)
         view.backgroundColor = UIColor.white
-        view.addShadow(shadowColor: UIColor.lightGray.cgColor , shadowOffset: CGSize(width: 1.0, height: 1.0), shadowOpacity: 0.6 , shadowRadius: 1.0)
-        view.layer.borderColor = UIColor.init(white: 0.95, alpha: 0.8).cgColor
-        view.layer.borderWidth = 1.0
         return view
     }()
     
-    private let imageView : UIImageView = {
-        let view = UIImageView(frame: CGRect.zero)
+    let imageView : ImageView = {
+        let view = ImageView(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.white
         view.isUserInteractionEnabled = true
-        view.image = #imageLiteral(resourceName: "mb1")
         return view
     }()
     
-    private let priceLabel : UILabel = {
-        let view = UILabel(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = ORANGE_COLOR
-        view.font = UIFont.systemFont(ofSize: 12.0)
-        view.textColor = UIColor.white
-        view.textAlignment = .center
-        view.addCorner(radius: 1.0, borderWidth: 0.5, color: UIColor.init(white: 0.9, alpha: 0.8))
-        view.text = "1.000.000 AZN"
-        return view
-    }()
+    let titleTextView : UITextView = {
     
-    let textView : UITextView  = {
         let view = UITextView(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.font = UIFont.systemFont(ofSize: 14.0)
-        view.contentInset = UIEdgeInsets(top: -2.0, left: 1.0, bottom: 5.0, right: 1.0)
-        view.text = "Mercedes-Benz c300 \n IL - 2014"
-        view.isUserInteractionEnabled = false
+        view.backgroundColor = ORANGE_COLOR
+        view.contentMode = .scaleAspectFill
+        view.contentInset = UIEdgeInsets(top: -5.0 , left: 0.0, bottom: 0.0 , right: 0.0)
+        view.textColor = UIColor.black.withAlphaComponent(0.8)
+        view.font = UIFont(name: HELVETICA_NEUE_BOLD , size: 14.0)
+        view.backgroundColor = UIColor.white
         view.isEditable = false
+        view.isUserInteractionEnabled = false
+        view.text = "Mercedes-Benz c300 \n IL - 2014"
         return view
-    }()
-
-    private let timeLabel : UILabel = {
-        let view = UILabel(frame: CGRect.zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.font = UIFont.systemFont(ofSize: 10.0)
-        view.textColor = UIColor.gray
-        view.textAlignment = .left
-        view.text = "Bugün, 11:30"
-        return view
+        
     }()
     
-    private let locationLabel : UILabel = {
+    let timeLabel : UILabel = {
+    
         let view = UILabel(frame: CGRect.zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.font = UIFont.systemFont(ofSize: 10.0)
-        view.textColor = UIColor.gray
-        view.textAlignment = .right
-        view.text = "Bakı"
+        view.contentMode = .scaleAspectFill
+        view.textColor = UIColor.lightGray
+        view.font = UIFont(name: HELVETICA_NEUE , size: 10.0)
+        view.text = "Bugun, 11:30"
         return view
+        
     }()
+    
+    let loactionLabel : UILabel = {
+        
+        let view = UILabel(frame: CGRect.zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .scaleAspectFill
+        view.textColor = UIColor.lightGray
+        view.font = UIFont(name: HELVETICA_NEUE , size: 10.0)
+        view.text = "Baki"
+        view.textAlignment = .right
+        return view
+        
+    }()
+    
+    let priceLabel : UILabel = {
+        
+        let view = UILabel(frame: CGRect.zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .scaleAspectFill
+        view.textColor = UIColor.white
+        view.font = UIFont(name: HELVETICA_NEUE, size: 13.0)
+        view.text = "1.000 AZN"
+        view.backgroundColor = ORANGE_COLOR
+        view.textAlignment = .center
+        return view
+        
+    }()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.desigView.fadeOut(duration: 0.0)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupViews()
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.designView.fadeOut(duration: 0.0)
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupViews () {
-        
+    private func setupViews () {
+    
+        self.addCorner(radius: 4.0, borderWidth: 1.0, color: GREEN_COLOR.withAlphaComponent(0.4))
         self.backgroundColor = UIColor.white
-       
-        // USING GOLDEN RATIO IN MY DESIGN
         
-        //1
-        self.addSubview(self.designView)
-        self.designView.leftAnchor.constraint(equalTo: self.leftAnchor, constant : 3.0).isActive = true
-        self.designView.topAnchor.constraint(equalTo: self.topAnchor, constant : 3.0 ).isActive = true
-        self.designView.widthAnchor.constraint(equalTo: self.widthAnchor , constant : -6.0).isActive = true
-        self.designView.heightAnchor.constraint(equalTo: self.heightAnchor , constant : -6.0).isActive = true
+        // 1 
+        self.addSubview(self.desigView)
+        self.desigView.leftAnchor.constraint(equalTo: self.leftAnchor , constant : 4.0).isActive = true
+        self.desigView.topAnchor.constraint(equalTo: self.topAnchor , constant : 4.0 ).isActive = true
+        self.desigView.widthAnchor.constraint(equalTo: self.widthAnchor , constant : -8.0 ).isActive = true
+        self.desigView.heightAnchor.constraint(equalTo: self.heightAnchor , constant : -8.0).isActive = true
         
-        // 2
-        self.designView.addSubview(self.imageView)
-        self.imageView.leftAnchor.constraint(equalTo: self.designView.leftAnchor).isActive = true
-        self.imageView.topAnchor.constraint(equalTo: self.designView.topAnchor).isActive = true
-        self.imageView.widthAnchor.constraint(equalTo: self.designView.widthAnchor).isActive = true
-        self.imageView.heightAnchor.constraint(equalTo: self.designView.heightAnchor , multiplier : 1/1.6).isActive = true
-     
+        // 2 
+        self.desigView.addSubview(self.imageView)
+        self.imageView.leftAnchor.constraint(equalTo: self.desigView.leftAnchor).isActive = true
+        self.imageView.topAnchor.constraint(equalTo: self.desigView.topAnchor).isActive = true
+        self.imageView.widthAnchor.constraint(equalTo: self.desigView.widthAnchor).isActive = true
+        self.imageView.heightAnchor.constraint(equalTo: self.desigView.heightAnchor , multiplier : 1/1.6).isActive = true
+        self.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self , action: #selector(handleZoom)))
+        
         // 3
-        self.imageView.addSubview(priceLabel)
-        self.priceLabel.leftAnchor.constraint(equalTo: self.imageView.leftAnchor).isActive = true
-        self.priceLabel.bottomAnchor.constraint(equalTo: self.imageView.bottomAnchor , constant: 1.0).isActive = true
-        self.priceLabel.widthAnchor.constraint(equalTo: self.imageView.widthAnchor , multiplier : 1/1.6).isActive = true
-        self.priceLabel.heightAnchor.constraint(equalTo: self.imageView.heightAnchor , multiplier : 1/4.0).isActive = true
+        self.desigView.addSubview(self.titleTextView)
+        self.titleTextView.leftAnchor.constraint(equalTo: self.desigView.leftAnchor).isActive = true
+        self.titleTextView.topAnchor.constraint(equalTo: self.imageView.bottomAnchor , constant : 1.0).isActive = true
+        self.titleTextView.widthAnchor.constraint(equalTo: self.desigView.widthAnchor).isActive = true
+        self.titleTextView.heightAnchor.constraint(equalToConstant : 40.0 ).isActive = true
         
         // 4
-        self.designView.addSubview(self.textView)
-        self.textView.leftAnchor.constraint(equalTo: self.designView.leftAnchor).isActive = true
-        self.textView.topAnchor.constraint(equalTo: self.imageView.bottomAnchor).isActive = true
-        self.textView.widthAnchor.constraint(equalTo: self.designView.widthAnchor).isActive = true
-        self.textView.bottomAnchor.constraint(equalTo: self.designView.bottomAnchor , constant : -20.0).isActive = true
+        self.desigView.addSubview(self.timeLabel)
+        self.timeLabel.leftAnchor.constraint(equalTo: self.desigView.leftAnchor , constant : 4.0).isActive = true
+        self.timeLabel.topAnchor.constraint(equalTo: self.titleTextView.bottomAnchor , constant : 1.0).isActive = true
+        self.timeLabel.widthAnchor.constraint(equalTo: self.desigView.widthAnchor , multiplier : 1/2 ).isActive = true
+        self.timeLabel.bottomAnchor.constraint(equalTo : self.desigView.bottomAnchor , constant : -1.0 ).isActive = true
         
         // 5
-        self.designView.addSubview(self.timeLabel)
-        self.timeLabel.leftAnchor.constraint(equalTo: self.designView.leftAnchor , constant : 5).isActive = true
-        self.timeLabel.topAnchor.constraint(equalTo: self.textView.bottomAnchor).isActive = true
-        self.timeLabel.rightAnchor.constraint(equalTo: self.designView.centerXAnchor ).isActive = true
-        self.timeLabel.bottomAnchor.constraint(equalTo: self.designView.bottomAnchor ).isActive = true
-        
-        // 5
-        self.designView.addSubview(self.locationLabel)
-        self.locationLabel.leftAnchor.constraint(equalTo: self.timeLabel.rightAnchor).isActive = true
-        self.locationLabel.topAnchor.constraint(equalTo: self.textView.bottomAnchor).isActive = true
-        self.locationLabel.rightAnchor.constraint(equalTo: self.designView.rightAnchor , constant : -5 ).isActive = true
-        self.locationLabel.bottomAnchor.constraint(equalTo: self.designView.bottomAnchor ).isActive = true
+        self.desigView.addSubview(self.loactionLabel)
+        self.loactionLabel.leftAnchor.constraint(equalTo: self.timeLabel.rightAnchor).isActive = true
+        self.loactionLabel.topAnchor.constraint(equalTo: self.titleTextView.bottomAnchor , constant : 1.0).isActive = true
+        self.loactionLabel.rightAnchor.constraint(equalTo: self.desigView.rightAnchor , constant  : -4.0 ).isActive = true
+        self.loactionLabel.bottomAnchor.constraint(equalTo : self.desigView.bottomAnchor , constant : -1.0 ).isActive = true
         
         // 6
-        let selectedBackGroudView = UIView(frame: self.frame)
-        selectedBackGroudView.backgroundColor = ORANGE_COLOR
-        self.selectedBackgroundView = selectedBackGroudView
+        self.imageView.addSubview(self.priceLabel)
+        self.priceLabel.leftAnchor.constraint(equalTo: self.imageView.leftAnchor).isActive = true
+        self.priceLabel.bottomAnchor.constraint(equalTo: self.imageView.bottomAnchor).isActive = true
+        self.priceLabel.widthAnchor.constraint(equalTo: self.imageView.widthAnchor , multiplier  : 1/2 ).isActive = true
+        self.priceLabel.heightAnchor.constraint(equalToConstant : 30.0).isActive = true
         
     }
     
-    @objc fileprivate func tap (gesture : UITapGestureRecognizer ) {
+    fileprivate func shareData() {
     
-        guard  let imageView = gesture.view as? UIImageView else {
-            return
+        if let imageURLString = self.ad?.image {
+            self.imageView.loadImageWithUrl(imageURLString)
         }
-   
-        if let controller = self.controller as? HomeVC {
-            controller.zoomInImageView(startingImageView: imageView , label: self.priceLabel)
+        
+        if let price = self.ad?.price  {
+            self.priceLabel.text = "\(price) AZN"
+        }
+        
+        if let location = self.ad?.location {
+            self.loactionLabel.text = location
+        }
+
+        if let dateString = self.ad?.date  {
+        
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM d, yyyy"
+            dateFormatter.locale = Locale(identifier: "en")
+            let date = dateFormatter.date(from: dateString)!
+            self.timeLabel.text = dateFormatter.string(from: date)
+            
+        }
+        
+        if let name = self.ad?.name , let model = self.ad?.model {
+            self.titleTextView.text = " \(name) \n \(model)"
         }
     
     }
     
     
+    @objc fileprivate func handleZoom (gesture : UITapGestureRecognizer) {
+    
+        if let imageView = gesture.view as? ImageView {
+        
+            if let homeController = self.controller as? HomeVC {
+    
+                homeController.zoomInImageView(startingImageView: imageView)
+            
+            }
+         
+        }
+    
+    }
     
 }
+
 
 
 

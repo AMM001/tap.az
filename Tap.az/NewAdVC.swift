@@ -1,55 +1,63 @@
+
 //
 //  NewAdVC.swift
-//  Tap.az
+//  tap.az
 //
-//  Created by Ozal Suleyman on 6/21/17.
+//  Created by Ozal Suleyman on 7/9/17.
 //  Copyright © 2017 OzalSuleyman. All rights reserved.
 //
 
 import UIKit
 
-fileprivate let CATEGORY_CELL_IDENTIFIER = "categoryCell"
-fileprivate let PHOTO_ADD_CELL_IDENTIFIER = "photoAddCell"
-fileprivate let AD_CELL_IDENTIFIER = "AdCell"
-fileprivate let USER_CELL_IDENTIFIER = "userCell"
-fileprivate let ADD_CELL = "addCell"
+fileprivate let AD_CATEGORY_CELL_IDENTIFIER = "categoryCell"
+fileprivate let CHOOSE_IMAGE_CELL_IDENTIFER = "chooseImageCell"
+fileprivate let AD_DETAIL_CELL_IDENTIFIER = "adDetailCell"
+fileprivate let AD_USER_CELL_IDENTIFIER = "adUserCell"
+fileprivate let ADD_AD_CELL_IDENTIFIER = "adCell"
 
-class NewAdVC : UIViewController {
+class NewAdVC: UIViewController {
+
+    lazy var collectionView : UICollectionView = {
     
-    var delegate : HomeVC?
-    
-    lazy var tableView : UITableView = {
-        let view = UITableView(frame: CGRect.zero , style: .plain)
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0.0
+        layout.minimumInteritemSpacing = 0.0
+        let view = UICollectionView(frame: CGRect.zero , collectionViewLayout: layout)
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ORANGE_COLOR
         view.delegate = self
         view.dataSource = self
-        view.backgroundColor = ORANGE_COLOR
-        view.separatorStyle = .none
         return view
+    
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Do any additional setup after loading the view.
         self.setupViews()
         
-        let tapGesture : UITapGestureRecognizer = UITapGestureRecognizer(target: self , action: #selector(dismisKeyboard))
-        self.view.addGestureRecognizer(tapGesture)
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        super.viewWillAppear(animated)
+        
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
-    
     
     fileprivate var counter = 0
     
@@ -60,8 +68,8 @@ class NewAdVC : UIViewController {
         if let _ = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             
             if self.counter == 1 {
-            
-                self.tableView.swipeToUp(height: 100.0)
+                
+                self.collectionView.swipeToUp(height: 100.0)
                 
             }
             
@@ -77,275 +85,202 @@ class NewAdVC : UIViewController {
             
             if counter == 0 {
                 
-                self.tableView.swipeToDown(height: 100.0)
+                self.collectionView.swipeToDown(height: 100.0)
                 
             }
             
         }
         
     }
-    
+
+
     private func setupViews () {
-        self.setupNavBar()
         
-        // 1
-        self.view.addSubview(self.tableView)
-        self.tableView.contentInset = UIEdgeInsets(top: 5.0 , left: 0.0 , bottom: 2.0, right: 0.0)
-        self.tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        self.tableView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        self.tableView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
-        self.tableView.register(AdCategoryCell.self , forCellReuseIdentifier: CATEGORY_CELL_IDENTIFIER)
-        self.tableView.register(PhotoAddCell.self , forCellReuseIdentifier: PHOTO_ADD_CELL_IDENTIFIER)
-        self.tableView.register(AdCell.self , forCellReuseIdentifier: AD_CELL_IDENTIFIER)
-        self.tableView.register(UserCell.self , forCellReuseIdentifier: USER_CELL_IDENTIFIER)
-        self.tableView.register(AddButtonCell.self , forCellReuseIdentifier: ADD_CELL)
+        self.setupNavBar()
+        self.setupCollectionView()
         
     }
     
     private func setupNavBar () {
     
-        let backButton = UIBarButtonItem(image: #imageLiteral(resourceName: "ic_arrow_back"), style: .plain , target: self , action: #selector(goBack))
-        self.navigationItem.leftBarButtonItems = [backButton]
+        // 1
+        let backButton = UIBarButtonItem(image: #imageLiteral(resourceName: "ic_arrow_back"), style: .plain, target: self , action: #selector (back))
+        self.navigationItem.leftBarButtonItem = backButton
         
-        let pageTitleLabel = UILabel(frame: CGRect(x: 0.0 , y: 0.0 , width: FRAME.size.width / 2.0 , height: 30.0))
-        pageTitleLabel.textColor = UIColor.white
-        pageTitleLabel.text = "Yeni elan"
-        pageTitleLabel.textAlignment = .center
-        pageTitleLabel.font = UIFont(name: "AvenirNext-Bold", size: 20.0)
-        self.navigationItem.titleView = pageTitleLabel
+        let titleLabel = UILabel(frame: CGRect(x: 0.0 , y: 0.0 , width: FRAME.size.width / 2.0 , height: 40.0))
+        titleLabel.text = "Yeni elan"
+        titleLabel.textColor = UIColor.white
+        titleLabel.contentMode = .scaleToFill
+        titleLabel.font = UIFont(name: HELVETICA_NEUE_BOLD , size: 20)
+        titleLabel.textAlignment = .center
+        self.navigationItem.titleView = titleLabel
+        
+    }
+    
+    
+    private func setupCollectionView () {
+    
+        self.view.addSubview(self.collectionView)
+        self.collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.collectionView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        self.collectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+        
+        self.collectionView.register(AdCategoryCell.self, forCellWithReuseIdentifier: AD_CATEGORY_CELL_IDENTIFIER)
+        self.collectionView.register(ChooseImageCell.self , forCellWithReuseIdentifier: CHOOSE_IMAGE_CELL_IDENTIFER)
+        self.collectionView.register(AdDetailCell.self , forCellWithReuseIdentifier: AD_DETAIL_CELL_IDENTIFIER)
+        self.collectionView.register(AdUserCell.self , forCellWithReuseIdentifier: AD_USER_CELL_IDENTIFIER)
+        self.collectionView.register(AddAdCell.self , forCellWithReuseIdentifier: ADD_AD_CELL_IDENTIFIER)
         
     }
     
-    @objc fileprivate func goBack () {
-
-        self.navigationController?.popToRootViewController(animated: true)
-    
+    @objc fileprivate func back () {
+        self.navigationController?.popViewController(animated: true )
     }
     
-    @objc fileprivate func dismisKeyboard () {
-        self.view.endEditing(true)
-    }
+    @objc fileprivate func send (sender : OZRippleButton) {
     
+        print("Gonderdim")
     
-    @objc func sendButton (sender : UIButton) {
-        
-        sender.makeClickEffect()
-    
-        print("Send button click...")   
-    
-    }
-    
-    func pushToCategoryVC (gesture : UITapGestureRecognizer) {
-    
-        let catController = CategoryVC()
-        catController.view.backgroundColor = ORANGE_COLOR
-//        self.show(catController , sender: self )
-//        self.navigationController?.pushViewController(catController , animated: true )
-        self.navigationController?.show(catController , sender: self )
-    }
-    
-    @objc func descriptionTextViewCilck (gesture: UITapGestureRecognizer) {
-    
-        print("textview cilck")
-    
-    }
-
-    // my custom zooming
-    var startingFrame : CGRect?
-    var blackBackgroudView : UIView?
-    
-    func zoomInImageView (startingImageView : UIImageView ) {
-        
-        startingFrame = startingImageView.superview?.convert(startingImageView.frame , to: nil)
-        
-        let zoomingImageView = UIImageView(frame: self.startingFrame!)
-        zoomingImageView.isUserInteractionEnabled = true
-        zoomingImageView.contentMode = .scaleAspectFill
-        zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self , action: #selector(zoomOut(gesture:))))
-        zoomingImageView.image = startingImageView.image
-        
-        if let keyWindow = UIApplication.shared.keyWindow {
-            
-            self.blackBackgroudView = UIView(frame: keyWindow.frame)
-            self.blackBackgroudView?.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.9)
-            keyWindow.addSubview(self.blackBackgroudView!)
-            keyWindow.addSubview(zoomingImageView)
-            
-            UIView.animate(withDuration: 0.5 , delay: 0.0 , usingSpringWithDamping: 1.0, initialSpringVelocity:  1.0 , options: .curveEaseOut , animations: {
-                
-                self.blackBackgroudView?.alpha = 0.95
-                // principle
-                // h1 / w1 = h2 / w2
-                let zoomingImageViewHeight = (self.startingFrame!.height / self.startingFrame!.width ) * keyWindow.frame.width
-                zoomingImageView.frame = CGRect(x: 0.0 , y: 0.0, width: keyWindow.frame.width , height: zoomingImageViewHeight)
-                zoomingImageView.center = keyWindow.center
-                
-            }, completion: { (complete : Bool) in
-                // doing nothing
-            })
-            
-        }
-        
-    }
-
-    func zoomOut (gesture : UITapGestureRecognizer) {
-        
-        if let zoomOutImageView = gesture.view {
-            
-            zoomOutImageView.layer.cornerRadius = 10.0
-            zoomOutImageView.layer.masksToBounds = true
-            
-            UIView.animate(withDuration: 0.5 , delay: 0.0 , usingSpringWithDamping: 1.0, initialSpringVelocity:  1.0 , options: .curveEaseOut , animations: {
-                
-                zoomOutImageView.frame = self.startingFrame!
-                self.blackBackgroudView?.fadeOut(duration: 0.0)
-                
-            }, completion: { (complete : Bool) in
-                
-                zoomOutImageView.removeFromSuperview()
-                
-            })
-            
-        }
-        
     }
     
 }
 
-extension NewAdVC : UITableViewDelegate , UITableViewDataSource {
-
+extension NewAdVC : UICollectionViewDelegate , UICollectionViewDataSource  {
     
-    @available(iOS 2.0, *)
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    // Default is 1 if not implemented
-    @available(iOS 2.0, *)
-    public func numberOfSections(in tableView: UITableView) -> Int  {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         
         return 5
     }
     
-    // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
-    // Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
+    @available(iOS 6.0, *)
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     
-    @available(iOS 2.0, *)
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
-        if indexPath.section == 0 {
+        return 1
+    }
 
-            if let adCategoryCell = tableView.dequeueReusableCell(withIdentifier:CATEGORY_CELL_IDENTIFIER , for: indexPath) as? AdCategoryCell{
+    @available(iOS 6.0, *)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        switch indexPath.section  {
+       
+        case  0:
             
+            if let adCategoryCell = collectionView.dequeueReusableCell(withReuseIdentifier: AD_CATEGORY_CELL_IDENTIFIER , for: indexPath) as? AdCategoryCell {
+            
+                adCategoryCell.delegate  = self
                 adCategoryCell.titleLabel.text = "Kategoriya"
-                adCategoryCell.delegate = self
             
                 return adCategoryCell
             }
-        
-        }else if indexPath.section == 1 {
-            
-            if let photoAddCell = tableView.dequeueReusableCell(withIdentifier: PHOTO_ADD_CELL_IDENTIFIER, for: indexPath) as? PhotoAddCell {
-            
-                photoAddCell.delegate = self
-                photoAddCell.addPhotoImageViewTopAnchor?.constant += 45.0
-                photoAddCell.selectedBackgroundView = UIView()
-                return photoAddCell
-                
-            }
-
-        }else if indexPath.section == 2 {
-        
-            if let adCell = tableView.dequeueReusableCell(withIdentifier: AD_CELL_IDENTIFIER, for: indexPath) as? AdCell {
-
-                adCell.delegate = self
-                
-                return adCell
-            }
-            
-        }else if indexPath.section == 3 {
-        
-            if let userCell = tableView.dequeueReusableCell(withIdentifier: USER_CELL_IDENTIFIER, for: indexPath) as? UserCell {
-            
-                userCell.delegete = self
-                
-                return userCell
-            }
-            
-        }else if indexPath.section == 4 {
-        
-            if let addButtonCell = tableView.dequeueReusableCell(withIdentifier: ADD_CELL , for: indexPath) as? AddButtonCell {
-        
-                addButtonCell.delegate = self
-                
-                return addButtonCell
-            }
-        
-        }
-        
-        return UITableViewCell()
-    }
-    
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        if indexPath.section == 0 {
-        
-            return 50.0
-        
-        }else if indexPath.section == 1 {
-            
-            return FRAME.size.height / 4.0
-            
-        }else if indexPath.section == 2 {
-            
-            return FRAME.size.height / 3.0
-        
-        }else if indexPath.section == 3 {
-        
-            return FRAME.size.height / 3.2
-            
-        }else if indexPath.section == 4 {
-        
-            return 100.0
-            
-        }
-        
-        return  0.0
-    }
-   
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-      
-        switch indexPath.section {
-        case 0:
-            
-            print("0")
             
             break
             
-        case 1 :
+        case 1:
             
-             print("1")
+            if let chooseImageCell = collectionView.dequeueReusableCell(withReuseIdentifier: CHOOSE_IMAGE_CELL_IDENTIFER, for: indexPath) as? ChooseImageCell {
+                chooseImageCell.delegate  = self
+            
+                chooseImageCell.addPhotoImageViewTopAnchor?.constant += 40.0
+                chooseImageCell.addPhotoImageView.swipeToDown(height: 40.0)
+                
 
+                return chooseImageCell
+            }
+            
             break
-
+            
         case 2 :
             
-             print("2")
+            if let adDetailCell = collectionView.dequeueReusableCell(withReuseIdentifier: AD_DETAIL_CELL_IDENTIFIER, for: indexPath) as? AdDetailCell {
             
+                 adDetailCell.delegate  = self
+                
+                return adDetailCell
+            }
+        
+            break
+            
+        case 3 :
+            
+            if let adUserCell = collectionView.dequeueReusableCell(withReuseIdentifier: AD_USER_CELL_IDENTIFIER , for: indexPath) as? AdUserCell {
+            
+                adUserCell.delegate  = self
+    
+                return adUserCell
+            }
+            
+            break
+            
+        case 4:
+            
+            if let addAdCell = collectionView.dequeueReusableCell(withReuseIdentifier: ADD_AD_CELL_IDENTIFIER , for: indexPath) as? AddAdCell {
+            
+                addAdCell.delegate = self
+                addAdCell.sendButton.addTarget(self , action: #selector(send) , for: .touchUpInside)
+            
+                return addAdCell
+            }
+        
             break
             
         default:
             
             break
         }
-        
-
-        
+    
+        return UICollectionViewCell()
     }
 
 }
+
+
+extension NewAdVC : UICollectionViewDelegateFlowLayout  {
+
+    @available(iOS 6.0, *)
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize  {
+    
+        if indexPath.section == 0 {
+        
+            return CGSize(width: FRAME.size.width , height: 50.0)
+      
+        }else if indexPath.section == 1 {
+        
+             return CGSize(width: FRAME.size.width , height: FRAME.size.height / 4.0)
+            
+        }else if indexPath.section == 2 {
+        
+             return CGSize(width: FRAME.size.width , height: FRAME.size.height / 2.8)
+        
+        }else if indexPath.section == 3 {
+        
+            return CGSize(width: FRAME.size.width , height: FRAME.size.height / 3.0)
+            
+        }else if indexPath.section == 4 {
+        
+            return CGSize(width: FRAME.size.width , height: 100.0)
+        }
+        
+        return CGSize.zero
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

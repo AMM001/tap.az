@@ -12,7 +12,7 @@ import QuartzCore
 @IBDesignable
 class OZRippleButton: UIButton {
     
-    @IBInspectable  var ripplePercent: Float = 0.8 {
+    @IBInspectable  var ripplePercent: Float = 0.6 {
         didSet {
             setupRippleView()
         }
