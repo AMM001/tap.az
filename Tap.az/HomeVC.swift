@@ -244,7 +244,7 @@ class HomeVC: UICollectionViewController {
     
     fileprivate func fetchData () {
     
-        Parser.parseLocalFile(resourse: "home", type: "json") { ( json ) in
+        OZJSONParser.parseLocalFile(resourse: "home", type: "json") { ( json ) in
             
             self.ads = []
             
